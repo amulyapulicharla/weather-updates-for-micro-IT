@@ -1,0 +1,24 @@
+async function getWeather() {
+  const location = document.getElementById('locationInput').value;
+  const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.cod === 200) {
+      const weatherInfo = `
+        <h2>${data.name}, ${data.sys.country}</h2>
+        <p>Temperature: ${data.main.temp} °C</p>
+        <p>Condition: ${data.weather[0].description}</p>
+        <p>Humidity: ${data.main.humidity}%</p>
+      `;
+      document.getElementById('weatherResult').innerHTML = weatherInfo;
+    } else {
+      document.getElementById('weatherResult').innerHTML = `<p>City not found!</p>`;
+    }
+  } catch (error) {
+    document.getElementById('weatherResult').innerHTML = `<p>Error fetching data.</p>`;
+  }
+}
